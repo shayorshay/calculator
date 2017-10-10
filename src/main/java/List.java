@@ -128,7 +128,7 @@ public class List<E extends Comparable> implements ListInterface<E>{
 	}
 
 
-	public boolean find(E d) {
+	public boolean find(E d) {	
 		goToFirst();
 
 		while(current != null) {
@@ -143,8 +143,7 @@ public class List<E extends Comparable> implements ListInterface<E>{
 				}
 				return false;
 			} 
-			goToNext();
-
+			current = current.next;
 		}
 		return false;
 	}
