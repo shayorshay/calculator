@@ -1,16 +1,15 @@
-import java.io.PrintStream;
 import java.math.BigInteger;
 import java.util.HashMap;
 
 public class Set<E extends Comparable<E>> implements SetInterface<E> {
 
 	ListInterface<E> setContent;
-	PrintStream out;
+//	PrintStream out;
 	HashMap<IdentifierInterface, SetInterface<BigInteger>> hmap;
 
 	Set() {
 		setContent = new List<E>();
-		out = new PrintStream(System.out);
+//		out = new PrintStream(System.out);
 	}
 
 	public void add(E e) {
@@ -116,7 +115,7 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 		return intersectionSet;
 	}
 
-	void printfSet(SetInterface<E> s) throws APException{
+/*	void printfSet(SetInterface<E> s) throws APException{
 		SetInterface<E> printingSet = s.copy();
 
 		while (printingSet.size()>0){
@@ -127,7 +126,7 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 		}
 		out.printf("\n");
 
-	}
+	}*/
 
 	public SetInterface<E> complement(SetInterface<E> set) throws APException {
 		SetInterface<E> complementSet = new Set<E>();
@@ -200,4 +199,3 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 	}
 
 }
-

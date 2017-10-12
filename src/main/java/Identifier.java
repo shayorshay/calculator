@@ -1,4 +1,3 @@
-
 public class Identifier implements IdentifierInterface{
 
 	String data;
@@ -22,12 +21,18 @@ public class Identifier implements IdentifierInterface{
 	}
 	
 	public int hashCode() {
-		return hashcode;
+		return data.hashCode();
 	}
 	
-	public boolean equals(Identifier i) {
-		return this.data == i.data;
-		
+	public boolean equals(Object o) {
+		if (o instanceof IdentifierInterface) { 
+			boolean result = data.equals(((Identifier) o).toString());
+		return result;
+				// data.equals((IdentifierInterface)o).value());
+		}
+		else {
+			return false;
+		}
 	}
 	
 	public void init(char c) throws APException {

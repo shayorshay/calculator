@@ -110,7 +110,7 @@ public class Main {
 	}
 	
 	SetInterface<BigInteger> rowNaturalNumbers(Scanner input) throws APException{
-		out.println("row of natural numbers");
+//		out.println("row of natural numbers");
 
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		if (nextCharIs(input, RIGHT_PARENTHESIS)) {	//if set is empty
@@ -152,7 +152,7 @@ public class Main {
 	}
 
 	private SetInterface<BigInteger> set(Scanner input) throws APException{
-		out.println("set");
+//		out.println("set");
 
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = rowNaturalNumbers(input);
@@ -160,7 +160,7 @@ public class Main {
 	}
 	
 	SetInterface<BigInteger> complexFactor(Scanner input)throws APException{
-		out.println("Complex Factor");
+	//	out.println("Complex Factor");
 		readWhitespace(input);
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = expression(input);
@@ -168,7 +168,7 @@ public class Main {
 	}
 	
 	SetInterface<BigInteger> factor (Scanner input) throws APException{
-		out.println("factor");
+//		out.println("factor");
 		readWhitespace(input);
 
 		SetInterface<BigInteger> result = new Set<BigInteger>();
@@ -194,8 +194,8 @@ public class Main {
 			out.println("read id: " + idString);
 //			out.println("id = " + id.toString());
 			result = hmap.get(id); //here something is not working!!--------------------------------------------------------------------------------
-			out.println("hmap get methods gives back content: ");
-			out.println ( result != null);
+//			out.println("hmap get methods gives back content: ");
+//			out.println ( result != null);
 //			System.out.println(result);
 		}
 		readWhitespace(input);
@@ -203,7 +203,7 @@ public class Main {
 	}
 	
 	private SetInterface<BigInteger> term (Scanner input) throws APException{
-		out.println("term");
+//		out.println("term");
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = factor (input);
 		readWhitespace(input);
@@ -225,7 +225,7 @@ public class Main {
 	}
 	
 	private SetInterface<BigInteger> expression(Scanner input) throws APException {
-		out.println("expression");
+//		out.println("expression");
 		SetInterface<BigInteger> result = term(input);
 		while(input.hasNext()) {
 			readWhitespace(input);
@@ -259,7 +259,7 @@ public class Main {
 		IdentifierInterface id = new Identifier(nextChar(in));
 		
 		while (in.hasNext()){ 
-			if ( nextCharIs(in, EQUAL_SIGN)||nextCharIs(in,WHITE_SPACE)){
+			if ( !nextCharIsNumber(in) && !nextCharIsLetter(in)){
 				return id; 
 			}
 			id.add(nextChar(in));
@@ -267,7 +267,7 @@ public class Main {
 //		out.printf("result for identifier is %s \n", result);
 
 //		Identifier id = new Identifier(result.toString());
-		out.printf("identifier: %s\n", id.toString());
+//		out.printf("identifier: %s\n", id.toString());
 
 		return id;
 	}
@@ -280,13 +280,13 @@ public class Main {
 		SetInterface<BigInteger> result = expression(in);
 		eoln(in);
 		hmap.put(id, result);
-		out.println("id has a value");
-		out.println(id!=null);
-		out.println("set has a value");
+//		out.println("id has a value");
+//		out.println(id!=null);
+//		out.println("set has a value");
 
-		out.println(result!=null);
-		out.println("hmap get method works");
-		out.println(hmap.get(id)!=null);
+//		out.println(result!=null);
+//		out.println("hmap get method works");
+//		out.println(hmap.get(id)!=null);
 		
 		//do we need to use hashmap here to link the set to the id. Also, should it return something??
 	}
