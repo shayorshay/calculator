@@ -291,7 +291,7 @@ public class Main {
 		//do we need to use hashmap here to link the set to the id. Also, should it return something??
 	}
 
-	private void printStatement(Scanner in) throws APException {
+	private void printStatement(Scanner in) throws APException {	//handle empty sets
 //		SetInterface<BigInteger> set = expression(in);
 		readWhitespace(in);
 		character(in, QUESTION_MARK);

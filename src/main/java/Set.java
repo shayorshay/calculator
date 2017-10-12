@@ -2,14 +2,12 @@ import java.math.BigInteger;
 import java.util.HashMap;
 
 public class Set<E extends Comparable<E>> implements SetInterface<E> {
-
+	
 	ListInterface<E> setContent;
-//	PrintStream out;
 	HashMap<IdentifierInterface, SetInterface<BigInteger>> hmap;
 
 	Set() {
 		setContent = new List<E>();
-//		out = new PrintStream(System.out);
 	}
 
 	public void add(E e) {
@@ -18,7 +16,7 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 		}
 	}
 
-	public void remove(E e) {
+	public void remove(E e) {	//check if set is empty first and throw an exception if it is
 		setContent.find(e);
 		setContent.remove();
 	}
@@ -34,9 +32,8 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 	}
 
 
-	public E get() throws APException{
+	public E get() throws APException{		//check if set is empty first
 		E data = setContent.retrieve();
-		//		setContent.remove();
 		return data;
 	}
 
@@ -49,18 +46,15 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 		while (setContent.goToNext()){
 			copyOfSet.add(setContent.retrieve());
 		}
-
 		return copyOfSet;
-
-
 	}
 
 
-	public SetInterface<E> union(SetInterface<E> set) throws APException {
+	public SetInterface<E> union(SetInterface<E> rhs) throws APException {	//check if the operand sets and resulting sets are empty.
 		SetInterface<E> unionSet = new Set<E>();
 		SetInterface<E> set1 = this.copy();
-		SetInterface<E> set2 = set.copy();
-
+		SetInterface<E> set2 = rhs.copy();
+		
 		while (set1.size() != 0){
 			E newItem = set1.get();
 			unionSet.add(newItem);
@@ -71,129 +65,59 @@ public class Set<E extends Comparable<E>> implements SetInterface<E> {
 			unionSet.add(newItem);
 			set2.remove(newItem);
 		}
-
 		return unionSet;
 	}
 
 
-	public SetInterface<E> intersection(SetInterface<E> set) throws APException {
+	public SetInterface<E> intersection(SetInterface<E> rhs) throws APException { //check if the operand sets and resulting sets are empty.
 		SetInterface<E> intersectionSet = new Set<E>();
-
 		SetInterface<E> set1 = this.copy();
-		//		SetInterface<E> set2 = set.copy();
-
-//		out.printf("Number of items in set 1: %d \n", set1.size());
-//		out.printf("Content of Set 1\n");
-//		printfSet(set1);
-		//		out.printf("Number of items in set 2: %d \n", set2.size());
-		//		printfSet(set2);
-
 
 		while (set1.size() != 0){
-			E newItem = set1.get();
-			String newi = newItem.toString();
-//			out.println("Comparing number from set 1 " + newi);
-			SetInterface<E> set2 = set.copy();
+			E num1 = set1.get();
+			SetInterface<E> set2 = rhs.copy();
 			while(set2.size() != 0){
-				E otherItem = set2.get();
-				String otheri = otherItem.toString();
-//				out.println("comparing to number of set 2 " + otheri);
-
-				if (otherItem.compareTo(newItem) == 0){
-					//					out.println("ik voeg nummers toe");
-					intersectionSet.add(newItem);
-					String i = newItem.toString();
-//					out.println("number added to the intersectionset: " + i + "\n");
+				E num2 = set2.get();
+				if (num2.compareTo(num1) == 0){
+					intersectionSet.add(num1);
 				}
-				set2.remove(otherItem);
+				set2.remove(num2);
 			}
-
-			set1.remove(newItem);
+			set1.remove(num1);
 		}
-//		out.printf("Content of intersection set:  \n");
-//		printfSet(intersectionSet);
 		return intersectionSet;
 	}
 
-/*	void printfSet(SetInterface<E> s) throws APException{
-		SetInterface<E> printingSet = s.copy();
 
-		while (printingSet.size()>0){
-			BigInteger i = (BigInteger) printingSet.get();
-			printingSet.remove((E) i);
-			i.toString();
-			out.printf("%s ", i);
-		}
-		out.printf("\n");
-
-	}*/
-
-	public SetInterface<E> complement(SetInterface<E> set) throws APException {
+	public SetInterface<E> complement(SetInterface<E> rhs) throws APException { //check if the operand sets and resulting sets are empty.
 		SetInterface<E> complementSet = new Set<E>();
 		SetInterface<E> set1 = this.copy();
 
-//		out.printf("Number of items in set 1: %d \n", set1.size());
-//		out.printf("Content of Set 1\n");
-//		printfSet(set1);
-//		out.printf("Number of items in set 2: %d \n", set.size());
-//		out.printf("Content of Set 2\n");
-//		printfSet(set);
-
 		while(set1.size() != 0) {
-			E newItem = set1.get();
-			SetInterface<E> set2 = set.copy();
-			boolean contains = false;
+			E num1 = set1.get();
+			SetInterface<E> set2 = rhs.copy();
+			boolean set2Contains = false;
 
 			while(set2.size() != 0) {
-//				out.println("hierkomik");
-				E otherItem = set2.get();
-				if (otherItem.compareTo(newItem) == 0) {
-					//					complementSet.add(newItem);
-					//					complementSet.add(otherItem);
-					contains = true;
+				E num2 = set2.get();
+				if (num2.compareTo(num1) == 0) {
+					set2Contains = true;
 				}
-				set2.remove(otherItem);
+				set2.remove(num2);
 			}
-			if (contains == false) {
-				complementSet.add(newItem);
+			if (!set2Contains) {
+				complementSet.add(num1);
 			}
-			set1.remove(newItem);
+			set1.remove(num1);
 		}
-
 		return complementSet;
 	}
 
 
-	public SetInterface<E> symmetricDifference(SetInterface<E> set) throws APException {
-
+	public SetInterface<E> symmetricDifference(SetInterface<E> set) throws APException { //check if the operand sets and resulting sets are empty.
 		SetInterface<E> unionSet = this.union(set);
-//		out.println("unionset");
-//		printfSet(unionSet);
 		SetInterface<E> intersectionSet = this.intersection(set);
-//		out.println("intersectionSet");
-//		printfSet(intersectionSet);
 		SetInterface<E> symDifferenceSet = unionSet.complement(intersectionSet);
-//		out.println("symDifferenceSet");
-//		printfSet(symDifferenceSet);		
-
-		
-//		SetInterface<E> set1 = this.copy();
-//		SetInterface<E> set2 = set.copy();		
-		
-//		while(unionSet.size() != 0) {
-//			E newItem = unionSet.get();
-//			SetInterface<E> intersectionSet = set1.intersection(set2);
-
-/*			while (intersectionSet.size() != 0) {
-				E otherItem = intersectionSet.get();
-				if(otherItem.compareTo(newItem) != 0) {
-					symDifferenceSet.add(newItem);
-					symDifferenceSet.add(otherItem);
-				}
-				intersectionSet.remove(otherItem);
-			}
-			unionSet.remove(newItem);
-		}*/
 
 		return symDifferenceSet;
 	}

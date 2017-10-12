@@ -13,10 +13,21 @@ public interface IdentifierInterface extends Comparable<IdentifierInterface> {
 	
 	/**
 	 * @pre -
-	 * @post -
+	 * @post - Returns the hash code of this identifier.
+	 */
+	int hashCode();
+	
+	/**
+	 * @pre -
+	 * @post - FALSE: The two identifiers are not the same.
+	 *     	   TRUE: The two identifiers are the same.
 	 */
 	boolean equals(Object Obj);
 	
+	/**
+	 * @pre -
+	 * @post - Appends chars to a string to form an identifier.
+	 */
 	void add(char c) throws APException;
 	
 }

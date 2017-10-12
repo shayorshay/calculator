@@ -36,7 +36,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		current = null;
 		size = 0;
 		return this;
-
 	}
 
 
@@ -85,14 +84,12 @@ public class List<E extends Comparable> implements ListInterface<E>{
 
 
 	private void insertLast(E d) {
-		//System.out.println("new node being inserted at last position");
 		Node newNode = new Node(d, current, null);
 		current.next = newNode;
 		current = newNode;
 	}
 
 	private void insertBefore(E d) {
-		//System.out.println("new node being inserted before current");
 		Node newNode = new Node(d, current.prior, current);
 		current.prior.next = newNode;
 		current.prior = newNode;
@@ -101,7 +98,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 	}
 
 	private void insertFirst(E d) {
-		//System.out.println("new node being inserted at first position");
 		Node newNode = new Node(d, null, current);
 		current.prior = newNode;
 		current = newNode;	
@@ -114,7 +110,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 
 
 	public ListInterface<E> remove() {
-
 		if (size < 2) {
 			current = null;
 			size = 0;
@@ -129,9 +124,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 			return this;
 		} else {
 			current = current.prior;
-			//System.out.println(current.prior.data);
-			//System.out.printf("new current after the last element is: ");
-			//System.out.println(current.data);
 			current.next = null;
 			size -= 1;
 			return this;
@@ -144,11 +136,9 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		goToFirst();
 
 		while(current != null) {
-			//System.out.println(current.data);
 			if (current.data.compareTo(d) == 0) {
 				return true;
 			}
-
 			if(current.data.compareTo(d) > 0) {
 				if (current.prior != null) {
 					current = current.prior;
@@ -173,9 +163,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 				current = current.prior;
 			}
 		}
-		//System.out.printf("gotofirst returns: ");
-		//System.out.println(current.data);
-		//System.out.println(current==null);
 		return true;
 	}
 
@@ -195,7 +182,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		if (current == null || current.next == null){
 			return false;
 		}
-
 		current = current.next;
 		return true;
 	}
@@ -205,7 +191,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		if (current == null || current.prior == null){
 			return false;
 		}
-
 		current = current.prior;
 		return true;
 	}
