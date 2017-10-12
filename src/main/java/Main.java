@@ -18,6 +18,8 @@ public class Main {
 	static final char RIGHT_PARENTHESIS = '}';
 	static final char OPENING_BRACKET = '(';
 	static final char CLOSING_BRACKET = ')';
+	static final char WHITE_SPACE = ' ';
+
 	
 	PrintStream out;
 	HashMap<IdentifierInterface, SetInterface<BigInteger>> hmap;
@@ -79,7 +81,7 @@ public class Main {
 			throw new APException("Additive Operator Expected");
 		}
 		char operator = nextChar(input); 
-		out.printf("operator: %c", operator);
+//		out.printf("operator: %c", operator);
 		return operator;
 	}
 
@@ -118,19 +120,33 @@ public class Main {
 
 		BigInteger num = naturalNumber(input);
 		result.add(num);
+//		out.print(" number added: ");
+//		out.print(num);
+//		out.print("\n");
+//		readWhitespace(input);
+
 
 		while(input.hasNext()) {
 			readWhitespace(input);
 			if(nextCharIs(input, COMMA)) {
 				character(input, COMMA);
+				readWhitespace(input);
 				num = naturalNumber(input);
 				result.add(num);
+//				out.print(" number added: ");
+//				out.print(num);
+//				out.print("\n");
 			} else if (nextCharIs(input, RIGHT_PARENTHESIS)) {
+//				out.printf("Number of items in this set %d \n", result.size());
+
 				return result;
 			} else {
 				throw new APException ("wrong input in row of natural numbers");
 			}
+//			readWhitespace(input);
 		}
+//		out.printf("Number of items in this set %d \n", result.size());
+
 		return result;
 
 	}
@@ -174,9 +190,13 @@ public class Main {
 
 		} else if (nextCharIsLetter(input)) {
 			IdentifierInterface id = getIdentifier(input);
-			out.println("id = " + id.toString());
+			String idString = id.toString();
+			out.println("read id: " + idString);
+//			out.println("id = " + id.toString());
 			result = hmap.get(id); //here something is not working!!--------------------------------------------------------------------------------
-			System.out.println(result);
+			out.println("hmap get methods gives back content: ");
+			out.println ( result != null);
+//			System.out.println(result);
 		}
 		readWhitespace(input);
 		return result;
@@ -188,8 +208,11 @@ public class Main {
 		result = factor (input);
 		readWhitespace(input);
 
-		System.out.println(result == null);
-		while (input.hasNext()){
+//		System.out.println(result == null);
+		while (input.hasNext()){                  // <-- Expects multiplicative operator. 
+			if (nextCharIs(input, UNION) || nextCharIs(input, COMPLEMENT) || nextCharIs(input, SYMMETRIC_DIFFERENCE)|| nextCharIs(input, CLOSING_BRACKET)) {
+			return result;
+			}
 			readWhitespace(input);
 			multiplicativeOperator(input);
 			readWhitespace(input);
@@ -206,6 +229,9 @@ public class Main {
 		SetInterface<BigInteger> result = term(input);
 		while(input.hasNext()) {
 			readWhitespace(input);
+			if (nextCharIs(input, CLOSING_BRACKET)) {
+			return result;
+			}
 			char operator = additiveOperator(input); 
 			readWhitespace(input);
 			SetInterface<BigInteger> newSet = new Set<BigInteger>();
@@ -228,34 +254,40 @@ public class Main {
 	}
 
 	private IdentifierInterface getIdentifier(Scanner in) throws APException {
-		out.println("identifier");
-		in.useDelimiter("\\W");		//delimiter is non-alphanumeric character
-		String data = in.next();
-		StringBuffer result = new StringBuffer();
-		Scanner idScanner = new Scanner(data);
-		while (idScanner.hasNext()){ 
-			if ( nextCharIsLetter(idScanner)||nextCharIsNumber(idScanner)){
-				result.append(nextChar(idScanner));
+//		out.println("identifier");
+		
+		IdentifierInterface id = new Identifier(nextChar(in));
+		
+		while (in.hasNext()){ 
+			if ( nextCharIs(in, EQUAL_SIGN)||nextCharIs(in,WHITE_SPACE)){
+				return id; 
 			}
-			else {
-				throw new APException("Format of identifier is incorrect");
-			}
+			id.add(nextChar(in));
 		}
-		out.printf("result for identifier is %s \n", result);
+//		out.printf("result for identifier is %s \n", result);
 
-		Identifier id = new Identifier(result.toString());
+//		Identifier id = new Identifier(result.toString());
 		out.printf("identifier: %s\n", id.toString());
+
 		return id;
 	}
 
 	private void assignment(Scanner in) throws APException {
-		out.println("assignment");
+//		out.println("assignment");
 		IdentifierInterface id = getIdentifier(in);
 		readWhitespace(in);	
 		character (in, EQUAL_SIGN);			
 		SetInterface<BigInteger> result = expression(in);
 		eoln(in);
 		hmap.put(id, result);
+		out.println("id has a value");
+		out.println(id!=null);
+		out.println("set has a value");
+
+		out.println(result!=null);
+		out.println("hmap get method works");
+		out.println(hmap.get(id)!=null);
+		
 		//do we need to use hashmap here to link the set to the id. Also, should it return something??
 	}
 
@@ -273,7 +305,10 @@ public class Main {
 	}
 
 	void printSet(SetInterface<BigInteger> s) throws APException{
+//		out.printf("size of this set; %d\n", s.size());
 		SetInterface<BigInteger> printingSet = s.copy();
+//		out.printf("size of the coppied set; %d\n", printingSet.size());
+
 		while (printingSet.size()>0){
 			BigInteger i = printingSet.get();
 			printingSet.remove(i);

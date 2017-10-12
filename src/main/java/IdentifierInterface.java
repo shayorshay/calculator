@@ -17,4 +17,6 @@ public interface IdentifierInterface extends Comparable<IdentifierInterface> {
 	 */
 	boolean equals(Object Obj);
 	
+	void add(char c) throws APException;
+	
 }

@@ -37,8 +37,7 @@ public interface ListInterface<E extends Comparable> {
 	ListInterface<E> insert(E d);
 
 
-	/** @throws APException 
-	 * @precondition  - The list is not empty.
+	/** @precondition  - The list is not empty.
 	 *	@postcondition -The value of the current element has been returned.
 	 */
 	E retrieve();
