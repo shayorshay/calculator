@@ -38,7 +38,7 @@ public interface ListInterface<E extends Comparable> {
 
 
 	/** @precondition  - The list is not empty.
-	 *	@postcondition -The value of the current element has been returned.
+	 *	@postcondition - The value of the current element has been returned.
 	 */
 	E retrieve();
 
@@ -103,7 +103,7 @@ public interface ListInterface<E extends Comparable> {
 
 	/**
 	 * @precondition -
-	 * @postcondition A deep copy of the list has been returned.
+	 * @postcondition - A deep copy of the list has been returned.
 	 */
 	ListInterface<E> copy();
 

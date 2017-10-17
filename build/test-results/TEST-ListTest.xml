@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="ListTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2017-10-05T09:12:56" hostname="SharonOwns" time="0.038">
+<testsuite name="ListTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2017-10-17T19:51:17" hostname="SharonOwns" time="0.016">
   <properties/>
-  <testcase name="testFind" classname="ListTest" time="0.016"/>
-  <testcase name="testInit" classname="ListTest" time="0.001"/>
-  <testcase name="testSize" classname="ListTest" time="0.007"/>
-  <testcase name="testgoToPrevious" classname="ListTest" time="0.001"/>
+  <testcase name="testFind" classname="ListTest" time="0.0"/>
+  <testcase name="testInit" classname="ListTest" time="0.0"/>
+  <testcase name="testSize" classname="ListTest" time="0.016"/>
+  <testcase name="testgoToPrevious" classname="ListTest" time="0.0"/>
   <testcase name="testRetrieve" classname="ListTest" time="0.0"/>
-  <testcase name="testInsert" classname="ListTest" time="0.001"/>
+  <testcase name="testInsert" classname="ListTest" time="0.0"/>
   <testcase name="testIsEmpty" classname="ListTest" time="0.0"/>
   <testcase name="testRemove" classname="ListTest" time="0.0"/>
   <testcase name="testgoToLast" classname="ListTest" time="0.0"/>

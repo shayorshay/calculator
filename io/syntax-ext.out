@@ -1,4 +1,4 @@
-error missing parenthesis
+error missing parenthesis		/we got multiplicative operator expected
 1 2
 
 
@@ -12,11 +12,11 @@ error missing parenthesis
 1 17
 1 2 3 4 5 6
 0
-error missing parenthesis
+error missing parenthesis	/we got multiplicative operator expected
 error undefined variable
 99999999999999999999999999999999999999999999999999999999999999999999999999
 error no end of line
-error missing parenthesis
+error missing parenthesis	/we got char: more input was expected
 error missing parenthesis
 error undefined variable
 error no statement

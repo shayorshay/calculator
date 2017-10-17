@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.io.PrintStream;
 
 public class Main {
-	
+
 	static final char QUESTION_MARK = '?';
 	static final char FORWARD_SLASH = '/';
 	static final char EQUAL_SIGN = '=';
@@ -20,7 +20,7 @@ public class Main {
 	static final char CLOSING_BRACKET = ')';
 	static final char WHITE_SPACE = ' ';
 
-	
+
 	PrintStream out;
 	HashMap<IdentifierInterface, SetInterface<BigInteger>> hmap;
 
@@ -36,7 +36,7 @@ public class Main {
 
 	private void eoln(Scanner input) throws APException {
 		if(input.hasNext()) {
-			throw new APException("End of line expected");
+			throw new APException("no end of line");
 		}
 	}
 
@@ -50,44 +50,50 @@ public class Main {
 		return input.hasNext("[0-9]");
 	}
 	
+	private boolean nextCharIsZero(Scanner input) {
+		input.useDelimiter( "(\\b|\\B)" );
+		return input.hasNext("[0]");
+	}
+
 	private boolean nextCharIsWhiteSpace(Scanner input) {
 		char whitespace = ' ';
 		return input.hasNext(Pattern.quote(whitespace+""));
-
 	}
-	
+
 	private void readWhitespace(Scanner input) throws APException{
 		input.useDelimiter( "(\\b|\\B)" );
-
 		while (nextCharIsWhiteSpace(input)){
 			nextChar(input);
 		}
 	}
 
 	private void character(Scanner input, char c) throws APException {
+		if (!input.hasNext()) {
+			throw new APException("char: More input was expected");
+		}
 		if (! nextCharIs(input, c)) {
-			String result = "Incorrect char found, : .";
-			char found = nextChar(input);
-			out.println(found);
-			result = result + found + ". "+ c;
-			result = result + " was expected";
-			throw new APException(result);
+			throw new APException("Incorrect char found");
 		}
 		nextChar(input); 
 	}
 
 	private char additiveOperator(Scanner input) throws APException {
+		if (!input.hasNext()) {
+			throw new APException("add op: More input was expected");
+		}
 		if (!nextCharIs(input, UNION) && !nextCharIs(input, COMPLEMENT) && !nextCharIs(input, SYMMETRIC_DIFFERENCE)) {
-			throw new APException("Additive Operator Expected");
+			throw new APException("Additive operator was expected");
 		}
 		char operator = nextChar(input); 
-//		out.printf("operator: %c", operator);
 		return operator;
 	}
 
 	private char multiplicativeOperator(Scanner input) throws APException {
+		if (!input.hasNext()) {
+			throw new APException("mult op: More input was expected");
+		}
 		if (!nextCharIs(input, INTERSECTION)) {
-			throw new APException("Multiplicative Operator Expected");
+			throw new APException("Multiplicative operator was expected");
 		}
 		char operator = nextChar(input); 
 		return operator;
@@ -97,35 +103,35 @@ public class Main {
 		return input.next().charAt(0);
 	}
 
-	
+
 	private BigInteger naturalNumber(Scanner input) throws APException{
 		StringBuffer sb = new StringBuffer();
+		
 		if (!nextCharIsNumber(input)) {
-			throw new APException ("wrong input: natural number expected");
+			throw new APException ("Wrong input, natural number was expected");
 		}
+		
+		if (nextCharIsZero(input)) {
+			sb.append(input.next());
+			return new BigInteger(sb.toString());
+		}
+		
 		while (nextCharIsNumber(input)) {
 			sb.append(input.next());
 		}
 		return new BigInteger(sb.toString());
 	}
-	
-	SetInterface<BigInteger> rowNaturalNumbers(Scanner input) throws APException{
-//		out.println("row of natural numbers");
 
+	SetInterface<BigInteger> rowNaturalNumbers(Scanner input) throws APException {
 		SetInterface<BigInteger> result = new Set<BigInteger>();
-		if (nextCharIs(input, RIGHT_PARENTHESIS)) {	//if set is empty
-			return result = null;
+		
+		if (nextCharIs(input, RIGHT_PARENTHESIS)) {	
+			return result;
 		}
 		readWhitespace(input);
-
 		BigInteger num = naturalNumber(input);
 		result.add(num);
-//		out.print(" number added: ");
-//		out.print(num);
-//		out.print("\n");
-//		readWhitespace(input);
-
-
+		
 		while(input.hasNext()) {
 			readWhitespace(input);
 			if(nextCharIs(input, COMMA)) {
@@ -133,120 +139,106 @@ public class Main {
 				readWhitespace(input);
 				num = naturalNumber(input);
 				result.add(num);
-//				out.print(" number added: ");
-//				out.print(num);
-//				out.print("\n");
 			} else if (nextCharIs(input, RIGHT_PARENTHESIS)) {
-//				out.printf("Number of items in this set %d \n", result.size());
-
 				return result;
 			} else {
-				throw new APException ("wrong input in row of natural numbers");
+				throw new APException ("Wrong input, natural number was expected");
 			}
-//			readWhitespace(input);
 		}
-//		out.printf("Number of items in this set %d \n", result.size());
-
 		return result;
-
 	}
 
-	private SetInterface<BigInteger> set(Scanner input) throws APException{
-//		out.println("set");
-
+	private SetInterface<BigInteger> set(Scanner input) throws APException {
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = rowNaturalNumbers(input);
 		return result;
 	}
-	
-	SetInterface<BigInteger> complexFactor(Scanner input)throws APException{
-	//	out.println("Complex Factor");
+
+	SetInterface<BigInteger> complexFactor(Scanner input)throws APException {
 		readWhitespace(input);
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = expression(input);
 		return result;
 	}
-	
-	SetInterface<BigInteger> factor (Scanner input) throws APException{
-//		out.println("factor");
-		readWhitespace(input);
 
+	SetInterface<BigInteger> factor (Scanner input) throws APException {
+		readWhitespace(input);
 		SetInterface<BigInteger> result = new Set<BigInteger>();
+		
 		if (nextCharIs(input, OPENING_BRACKET)){
 			character (input, OPENING_BRACKET); 
 			readWhitespace(input);
-
 			result = complexFactor(input);
 			readWhitespace(input);
 			character (input, CLOSING_BRACKET); 
-
+			readWhitespace(input);
+			return result;
+			
 		} else if(nextCharIs(input, LEFT_PARENTHESIS)){
 			character (input,LEFT_PARENTHESIS); 
 			readWhitespace(input);
 			result = set(input);
 			readWhitespace(input);
-
 			character (input, RIGHT_PARENTHESIS); 
-
+			readWhitespace(input);
+			return result;
+			
 		} else if (nextCharIsLetter(input)) {
 			IdentifierInterface id = getIdentifier(input);
-			String idString = id.toString();
-			out.println("read id: " + idString);
-//			out.println("id = " + id.toString());
-			result = hmap.get(id); //here something is not working!!--------------------------------------------------------------------------------
-//			out.println("hmap get methods gives back content: ");
-//			out.println ( result != null);
-//			System.out.println(result);
+			if (!hmap.containsKey(id)) {
+				String errorMessage = "The identifier \"" + id.toString() + "\" is undefined";
+				throw new APException (errorMessage);
+			}
+			result = hmap.get(id); 
+			readWhitespace(input);
+			return result;
 		}
-		readWhitespace(input);
-		return result;
+		else {
+			throw new APException ("Factor was expected");
+		}
 	}
-	
-	private SetInterface<BigInteger> term (Scanner input) throws APException{
-//		out.println("term");
+
+	private SetInterface<BigInteger> term (Scanner input) throws APException {
 		SetInterface<BigInteger> result = new Set<BigInteger>();
 		result = factor (input);
 		readWhitespace(input);
 
-//		System.out.println(result == null);
-		while (input.hasNext()){                  // <-- Expects multiplicative operator. 
+		while (input.hasNext()){               
 			if (nextCharIs(input, UNION) || nextCharIs(input, COMPLEMENT) || nextCharIs(input, SYMMETRIC_DIFFERENCE)|| nextCharIs(input, CLOSING_BRACKET)) {
-			return result;
+				return result;
 			}
 			readWhitespace(input);
 			multiplicativeOperator(input);
 			readWhitespace(input);
 			SetInterface<BigInteger> newSet = new Set<BigInteger>();
 			newSet = factor(input);
-			out.println("take Intersection");
 			result = result.intersection(newSet);
 		}
 		return result;
 	}
-	
+
 	private SetInterface<BigInteger> expression(Scanner input) throws APException {
-//		out.println("expression");
 		SetInterface<BigInteger> result = term(input);
 		while(input.hasNext()) {
 			readWhitespace(input);
 			if (nextCharIs(input, CLOSING_BRACKET)) {
-			return result;
+				return result;
 			}
 			char operator = additiveOperator(input); 
 			readWhitespace(input);
 			SetInterface<BigInteger> newSet = new Set<BigInteger>();
+			if (!input.hasNext()) {
+				throw new APException("Term was expected");
+			}
 			newSet = term (input);
 
-			if (operator == UNION){
-				out.println("take Union ");
+			if (operator == UNION) {
 				result = result.union(newSet);
 			}
-			else if (operator == COMPLEMENT){
-				out.println("take Complement ");
+			else if (operator == COMPLEMENT) {
 				result = result.complement(newSet);
 			}
-			else if (operator == SYMMETRIC_DIFFERENCE){
-				out.println("take Sym-Diff ");
+			else if (operator == SYMMETRIC_DIFFERENCE) {
 				result = result.symmetricDifference(newSet);
 			}			
 		}
@@ -254,77 +246,55 @@ public class Main {
 	}
 
 	private IdentifierInterface getIdentifier(Scanner in) throws APException {
-//		out.println("identifier");
-		
 		IdentifierInterface id = new Identifier(nextChar(in));
-		
-		while (in.hasNext()){ 
+
+		while (in.hasNext()) { 
 			if ( !nextCharIsNumber(in) && !nextCharIsLetter(in)){
 				return id; 
 			}
 			id.add(nextChar(in));
 		}
-//		out.printf("result for identifier is %s \n", result);
-
-//		Identifier id = new Identifier(result.toString());
-//		out.printf("identifier: %s\n", id.toString());
-
 		return id;
 	}
 
 	private void assignment(Scanner in) throws APException {
-//		out.println("assignment");
 		IdentifierInterface id = getIdentifier(in);
 		readWhitespace(in);	
-		character (in, EQUAL_SIGN);			
+		character (in, EQUAL_SIGN);	
 		SetInterface<BigInteger> result = expression(in);
 		eoln(in);
 		hmap.put(id, result);
-//		out.println("id has a value");
-//		out.println(id!=null);
-//		out.println("set has a value");
-
-//		out.println(result!=null);
-//		out.println("hmap get method works");
-//		out.println(hmap.get(id)!=null);
-		
-		//do we need to use hashmap here to link the set to the id. Also, should it return something??
 	}
 
-	private void printStatement(Scanner in) throws APException {	//handle empty sets
-//		SetInterface<BigInteger> set = expression(in);
+	private void printStatement(Scanner in) throws APException {
 		readWhitespace(in);
 		character(in, QUESTION_MARK);
 		readWhitespace(in);
 		SetInterface<BigInteger> expression = expression(in);
 		readWhitespace(in);
-
 		eoln(in);
 		printSet(expression);
-//		eoln(in);
 	}
 
-	void printSet(SetInterface<BigInteger> s) throws APException{
-//		out.printf("size of this set; %d\n", s.size());
+	void printSet(SetInterface<BigInteger> s) throws APException {
 		SetInterface<BigInteger> printingSet = s.copy();
-//		out.printf("size of the coppied set; %d\n", printingSet.size());
 
-		while (printingSet.size()>0){
+		while (printingSet.size() > 0) {
 			BigInteger i = printingSet.get();
 			printingSet.remove(i);
 			i.toString();
 			out.printf("%s ", i);
 		}
 		out.printf("\n");
-
 	}
-	
+
 	private void comment(Scanner in) throws APException {
 		in.nextLine();
 		eoln(in);
 	}
-	
+
 	private void statement (Scanner input) throws APException {
+		readWhitespace(input);
 		if (nextCharIs(input, FORWARD_SLASH)) {
 			comment(input);
 		} else if (nextCharIs(input, QUESTION_MARK)) {
@@ -339,10 +309,8 @@ public class Main {
 
 	private void start() {
 		Scanner in = new Scanner (System.in);
-		while (in.hasNextLine()){
+		while (in.hasNextLine()) {
 			String statement = in.nextLine();
-			//String newstring = statement.replaceAll(" ","");
-			//out.println(statement);
 			Scanner statementScanner = new Scanner(statement);
 			statementScanner.useDelimiter( "(\\b|\\B)" );
 

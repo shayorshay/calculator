@@ -1,7 +1,6 @@
 public class List<E extends Comparable> implements ListInterface<E>{
 
 	private class Node {
-
 		E data;
 		Node prior,
 		next;
@@ -15,12 +14,10 @@ public class List<E extends Comparable> implements ListInterface<E>{
 			this.prior = prior;
 			this.next = next;
 		}
-
 	}
 
 	Node current;
 	int size;
-
 
 	List () {
 		current = null;
@@ -53,7 +50,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 			size += 1;
 			return this;
 		}
-
 		if (d.compareTo(current.data) < 0) {
 			insertFirst(d);
 			size += 1;
@@ -61,24 +57,23 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		} 
 
 		goToNext();
-		
+
 		while (current.next != null) {
-			
 			if (current.data.compareTo(d) > 0) {
 				insertBefore(d);
 				size += 1;
 				return this;
 			}
 			current = current.next;	
-			if (current.next == null && d.compareTo(current.data) < 0) {
-				insertBefore(d);
-				size += 1;
-				return this;
-			}
 		}
-
-		insertLast(d);
-		size += 1;
+		if(current.data.compareTo(d) > 0) {
+			insertBefore(d);
+			size +=1;
+		}
+		else {
+			insertLast(d);
+			size += 1;
+		}
 		return this;
 	}
 
@@ -104,6 +99,7 @@ public class List<E extends Comparable> implements ListInterface<E>{
 
 	}
 
+	
 	public E retrieve() {
 		return current.data;
 	}
@@ -134,7 +130,6 @@ public class List<E extends Comparable> implements ListInterface<E>{
 
 	public boolean find(E d) {	
 		goToFirst();
-
 		while(current != null) {
 			if (current.data.compareTo(d) == 0) {
 				return true;
@@ -156,10 +151,10 @@ public class List<E extends Comparable> implements ListInterface<E>{
 
 
 	public boolean goToFirst() {
-		if (current == null){
+		if (current == null) {
 			return false;
 		} else {
-			while (current.prior != null){
+			while (current.prior != null) {
 				current = current.prior;
 			}
 		}
@@ -171,7 +166,7 @@ public class List<E extends Comparable> implements ListInterface<E>{
 		if (current == null){
 			return false;
 		}
-		while (current.next != null){
+		while (current.next != null) {
 			current = current.next;
 		}
 		return true;

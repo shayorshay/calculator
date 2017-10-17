@@ -1,9 +1,10 @@
+
 public class Identifier implements IdentifierInterface{
 
 	String data;
 	int hashcode;
 
-	Identifier (char c) throws APException{
+	Identifier (char c) throws APException {
 		init(c);
 	}
 
@@ -19,7 +20,8 @@ public class Identifier implements IdentifierInterface{
 		if (o instanceof IdentifierInterface) { 
 			boolean result = data.equals(((Identifier) o).toString());
 			return result;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
@@ -48,5 +50,9 @@ public class Identifier implements IdentifierInterface{
 	public int compareTo(IdentifierInterface o) {
 		return 0;
 	}
+
+
+
+
 
 }
