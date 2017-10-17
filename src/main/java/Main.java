@@ -49,7 +49,7 @@ public class Main {
 		input.useDelimiter( "(\\b|\\B)" );
 		return input.hasNext("[0-9]");
 	}
-	
+
 	private boolean nextCharIsZero(Scanner input) {
 		input.useDelimiter( "(\\b|\\B)" );
 		return input.hasNext("[0]");
@@ -69,9 +69,15 @@ public class Main {
 
 	private void character(Scanner input, char c) throws APException {
 		if (!input.hasNext()) {
-			throw new APException("char: More input was expected");
+			if (c == RIGHT_PARENTHESIS) {
+				throw new APException("Missing right parenthesis");
+			} else if (c == CLOSING_BRACKET) {
+				throw new APException("Missing closing bracket");
+			}else {
+				throw new APException("More input was expected");
+			}
 		}
-		if (! nextCharIs(input, c)) {
+		if (!nextCharIs(input, c)) {
 			throw new APException("Incorrect char found");
 		}
 		nextChar(input); 
@@ -79,7 +85,7 @@ public class Main {
 
 	private char additiveOperator(Scanner input) throws APException {
 		if (!input.hasNext()) {
-			throw new APException("add op: More input was expected");
+			throw new APException("More input was expected");
 		}
 		if (!nextCharIs(input, UNION) && !nextCharIs(input, COMPLEMENT) && !nextCharIs(input, SYMMETRIC_DIFFERENCE)) {
 			throw new APException("Additive operator was expected");
@@ -90,7 +96,7 @@ public class Main {
 
 	private char multiplicativeOperator(Scanner input) throws APException {
 		if (!input.hasNext()) {
-			throw new APException("mult op: More input was expected");
+			throw new APException("More input was expected");
 		}
 		if (!nextCharIs(input, INTERSECTION)) {
 			throw new APException("Multiplicative operator was expected");
@@ -106,16 +112,16 @@ public class Main {
 
 	private BigInteger naturalNumber(Scanner input) throws APException{
 		StringBuffer sb = new StringBuffer();
-		
+
 		if (!nextCharIsNumber(input)) {
 			throw new APException ("Wrong input, natural number was expected");
 		}
-		
+
 		if (nextCharIsZero(input)) {
 			sb.append(input.next());
 			return new BigInteger(sb.toString());
 		}
-		
+
 		while (nextCharIsNumber(input)) {
 			sb.append(input.next());
 		}
@@ -124,14 +130,14 @@ public class Main {
 
 	SetInterface<BigInteger> rowNaturalNumbers(Scanner input) throws APException {
 		SetInterface<BigInteger> result = new Set<BigInteger>();
-		
+
 		if (nextCharIs(input, RIGHT_PARENTHESIS)) {	
 			return result;
 		}
 		readWhitespace(input);
 		BigInteger num = naturalNumber(input);
 		result.add(num);
-		
+
 		while(input.hasNext()) {
 			readWhitespace(input);
 			if(nextCharIs(input, COMMA)) {
@@ -164,7 +170,7 @@ public class Main {
 	SetInterface<BigInteger> factor (Scanner input) throws APException {
 		readWhitespace(input);
 		SetInterface<BigInteger> result = new Set<BigInteger>();
-		
+
 		if (nextCharIs(input, OPENING_BRACKET)){
 			character (input, OPENING_BRACKET); 
 			readWhitespace(input);
@@ -173,7 +179,7 @@ public class Main {
 			character (input, CLOSING_BRACKET); 
 			readWhitespace(input);
 			return result;
-			
+
 		} else if(nextCharIs(input, LEFT_PARENTHESIS)){
 			character (input,LEFT_PARENTHESIS); 
 			readWhitespace(input);
@@ -182,7 +188,7 @@ public class Main {
 			character (input, RIGHT_PARENTHESIS); 
 			readWhitespace(input);
 			return result;
-			
+
 		} else if (nextCharIsLetter(input)) {
 			IdentifierInterface id = getIdentifier(input);
 			if (!hmap.containsKey(id)) {
